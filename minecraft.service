@@ -5,7 +5,7 @@ After=syslog.target
 [Service]
 WorkingDirectory=/usr/local/games/minecraft
 SyslogIdentifier=mincraft
-ExecStart=/usr/bin/java -Xms512M -Xmx900M -jar server.jar nogui
+ExecStart=/usr/bin/java -Xms1024M -Xmx1024M -jar server.jar nogui
 User=minecraft
 Type=simple
 
