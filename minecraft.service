@@ -1,0 +1,13 @@
+[Unit]
+Description=Minecraft Server
+After=syslog.target
+
+[Service]
+WorkingDirectory=/usr/local/games/minecraft
+SyslogIdentifier=mincraft
+ExecStart=/usr/bin/java -Xms512M -Xmx900M -jar server.jar nogui
+User=minecraft
+Type=simple
+
+[Install]
+WantedBy=multi-user.target
