@@ -1,4 +1,4 @@
-#! /usr/bin/env python
+#! /usr/bin/env python3
 # encoding: utf-8
 
 #
@@ -6,6 +6,8 @@
 #
 #		This script expects the aws configuration file to be set up.
 #		The default profile is jeanco and should be defined in the aws configuration file.
+#		
+#		The Python3 version (just changed the print statements)
 #
 #		Sid Stuart 8/31/2018
 #
@@ -30,17 +32,18 @@ def main():
 	try:
 		session = boto3.session.Session(profile_name=ARGS.profile, region_name=ARGS.region)
 		(is_running, ip, state, instance_id, count) = instance_running(session, ARGS.name)
-		print "There are %d instance(s) running" % (count)
+		print (f'There are {count:d} instance(s) running')
 		if not is_running:
 			start_instance(session, ARGS.region, instance_id, ARGS.name)
 			time.sleep(30)
 			(is_running, ip, state, instance_id, count) = instance_running(session, ARGS.name)
-		print "Minecraft server %s is running at IP address %s" % (ARGS.name, ip)
+		print (f'Minecraft server {ARGS.name} is running at IP address {ip}')
 
 	# The boto documentation does a poor job of documenting what exceptions are thrown,
 	# so use a catch all and hope for the best.
 	except:
-		print "Unexpected error in main, type %s, value %s" % (sys.exc_info()[:2])
+		(except_type, value) = (sys.exc_info()[:2])
+		print (f'Unexpected error in main, type {except_type}, value {value}')
 		sys.exit(-1)
 
 
@@ -69,7 +72,8 @@ def instance_running(session, name):
 		else:
 			return (is_running, None, None, instance['InstanceId'], count)
 	except:
-		print "Unexpected error in instance_running, type %s, value %s" % (sys.exc_info()[:2])
+		(except_type, value) = (sys.exc_info()[:2])
+		print (f'Unexpected error in instance_running, type {except_type}, value {value}')
 		sys.exit(-1)
 
 
@@ -82,15 +86,15 @@ def start_instance(session, region, instance_id, name):
 	# Now verify that it is up and pick up the IP address. (Because the response does not provide the IP. Eww!)
 	(is_running, ip, state, instance_id, count) = instance_running(session, name)
 	if is_running:
-		print 'IP address on newly started server %s is %s' %(name, ip)
+		print (f'IP address on newly started server {name} is {ip}')
 	elif state == 'pending':
-		print 'Instance is not up, waiting for 60 seconds'
+		print ('Instance is not up, waiting for 60 seconds')
 		time.sleep(60)
 		(is_running, ip, state, instance_id, count) = instance_running(session, name)
 		if is_running:
-			print 'Server %s started, IP address is %s' %(name, ip)
+			print (f'Server {name} started, IP address is {ip}')
 		else:
-			print 'Quiting, I not sure what is wrong.'
+			print ('Quiting, I not sure what is wrong.')
 
 
 if __name__ == "__main__":

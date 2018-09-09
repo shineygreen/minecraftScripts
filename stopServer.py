@@ -1,9 +1,11 @@
-#! /usr/bin/env python
+#! /usr/bin/env python3
 # encoding: utf-8
 
 #
 #		Script to stop a running EC2 instance. Lot's of cut and paste from the start script.
 #
+#   The Python3 version (just changed the print statements)
+
 #		Sid Stuart
 #		Sept 2, 2018
 #
@@ -28,18 +30,19 @@ def main():
 	try:
 		session = boto3.session.Session(profile_name=ARGS.profile, region_name=ARGS.region)
 		(is_running, ip, state, instance_id, count) = instance_running(session, ARGS.name)
-		print "There are %d instance(s) running" % (count)
+		print (f'There are {count:d} instance(s) running')
 		if is_running:
-			print 'Stopping server'
+			print ('Stopping server')
 			result = stop_server(session, ARGS.region, instance_id, ARGS.name)
-			print "Stopped Minecraft server %s" % (ARGS.name)
+			print (f'Stopped Minecraft server {ARGS.name}')
 		else:
-			print 'Server %s is not running' % (ARGS.name)
+			print (f'Server {ARGS.name} is not running')
 
 	# The boto documentation does a poor job of documenting what exceptions are thrown,
 	# so use a catch all and hope for the best.
 	except:
-		print "Unexpected error in main, type %s, value %s" % (sys.exc_info()[:2])
+		(except_type, value) = (sys.exc_info()[:2])
+		print (f'Unexpected error in main, type {except_type}, value {value}')
 		sys.exit(-1)
 
 
@@ -68,7 +71,8 @@ def instance_running(session, name):
 		else:
 			return (is_running, None, None, instance['InstanceId'], count)
 	except:
-		print "Unexpected error in instance_running, type %s, value %s" % (sys.exc_info()[:2])
+		(except_type, value) = (sys.exc_info()[:2])
+		print (f'Unexpected error in isntance_running, type {except_type}, value {value}')
 		sys.exit(-1)
 
 
@@ -83,11 +87,11 @@ def stop_server(session, region, instance_id, name):
 	time.sleep(20)
 	(is_running, ip, state, instance_id, count) = instance_running(session, name)
 	if is_running:
-		print 'It is still running, waiting for a minute' % ()
+		print ('It is still running, waiting for a minute')
 		time.sleep(60)
 		(is_running, ip, state, instance_id, count) = instance_running(session, name)
 		if is_running:
-			print 'Argh! %s is still running, shut it down through the console.' % (name)
+			print ('Argh! {name} is still running, shut it down through the console.')
 
 
 
