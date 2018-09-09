@@ -11,7 +11,7 @@ Steps needed on a Mac
 * Clone the git repository, "git clone git@github.com:shineygreen/minecraftScripts.git"
 * Create a server in AWS. Be sure to tag it with a name. The default is jeanServer.
 * I have provided a systemd script to manage the minecraft server, so pick "Amazon Linux 2 AMI" for the operating system. Select a t2.small instance type. Use the default setting of 8GB for the EBS volume setting. On the "Add Tags" page, note the "click to add a Name tag" link. Use it to create a name tag. jeanServer is the default. On the "Configure Security Group" page, add a "Custom TCP rule" with the "Port Range" 25565. The "Source" should be Anywhere. Give it the description Minecraft. When the instance is created, download the private key somewhere safe. Change the permissions on the key with "chmod 0600 mykey.pem".
-* Run the startServer.py script to get the IP address of the server.
+* Run the startServer.py script to get the IP address of the server. (Don't worry that the server is already running.)
 * Login to the server with "ssh -i mykey.pem ec2-user@IP_ADDRESS"
 * From the repository, copy the minecraft.service file to the new server, "scp -i minecraft.service ec2-user@IP_ADDRESS:/tmp"
 * On the server, copy the service file to the correct location, "sudo cp /tmp/minecraft.service /etc/systemd/system"
